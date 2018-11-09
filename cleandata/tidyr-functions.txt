@@ -1,0 +1,213 @@
+
+==============seperate  (seperate a column to 2 columns)
+
+> tab
+   grade sex_class count
+1      A    male_1     3
+2      B    male_1     6
+3      C    male_1     7
+4      D    male_1     4
+5      E    male_1     1
+6      A  female_1     4
+7      B  female_1     4
+8      C  female_1     4
+9      D  female_1     0
+10     E  female_1     1
+11     A    male_2     3
+12     B    male_2     3
+
+  tab %>% separate(sex_class , c("sex", "class")) 
+
+   grade    sex class count
+1      A   male     1     3
+2      B   male     1     6
+3      C   male     1     7
+4      D   male     1     4
+5      E   male     1     1
+6      A female     1     4
+7      B female     1     4
+8      C female     1     4
+9      D female     1     0
+10     E female     1     1
+..........................
+
+
+
+=======================gather
+students3
+    name    test class1 class2 class3 class4 class5
+1  Sally midterm      A   <NA>      B   <NA>   <NA>
+2  Sally   final      C   <NA>      C   <NA>   <NA>
+3   Jeff midterm   <NA>      D   <NA>      A   <NA>
+4   Jeff   final   <NA>      E   <NA>      C   <NA>
+5  Roger midterm   <NA>      C   <NA>   <NA>      B
+6  Roger   final   <NA>      A   <NA>   <NA>      A
+7  Karen midterm   <NA>   <NA>      C      A   <NA>
+8  Karen   final   <NA>   <NA>      C      A   <NA>
+
+students3 %>%
+  gather(class , grade, class1: class5, na.rm = TRUE) %>%
+  print
+
+    name    test  class grade
+1  Sally midterm class1     A
+2  Sally   final class1     C
+9  Brian midterm class1     B
+10 Brian   final class1     B
+13  Jeff midterm class2     D
+14  Jeff   final class2     E
+15 Roger midterm class2     C
+16 Roger   final class2     A
+21 Sally midterm class3     B
+..................
+
+
+=============================spread
+
+> tab
+    name    test  class grade
+1  Sally midterm class1     A
+2  Sally   final class1     C
+9  Brian midterm class1     B
+10 Brian   final class1     B
+13  Jeff midterm class2     D
+14  Jeff   final class2     E
+15 Roger midterm class2     C
+16 Roger   final class2     A
+21 Sally midterm class3     B
+22 Sally   final class3     C
+27 Karen midterm class3     C
+
+> spread(tab, test, grade)
+    name  class final midterm
+1  Brian class1     B       B
+2  Brian class5     C       A
+3   Jeff class2     E       D
+4   Jeff class4     C       A
+5  Karen class3     C       C
+6  Karen class4     A       A
+7  Roger class2     A       C
+8  Roger class5     A       B
+9  Sally class1     C       A
+10 Sally class3     C       B
+
+==========================mutate (revalue a column)
+> tab
+    name  class final midterm
+1  Brian class1     B       B
+2  Brian class5     C       A
+3   Jeff class2     E       D
+4   Jeff class4     C       A
+5  Karen class3     C       C
+6  Karen class4     A       A
+7  Roger class2     A       C
+8  Roger class5     A       B
+9  Sally class1     C       A
+10 Sally class3     C       B
+
+> tab %>% mutate(class = parse_number(class))
+    name class final midterm
+1  Brian     1     B       B
+2  Brian     5     C       A
+3   Jeff     2     E       D
+4   Jeff     4     C       A
+5  Karen     3     C       C
+6  Karen     4     A       A
+7  Roger     2     A       C
+8  Roger     5     A       B
+9  Sally     1     C       A
+10 Sally     3     C       B
+
+=====================================select (subset of columns)
+students4
+    id  name sex class midterm final
+1  168 Brian   F     1       B     B
+2  168 Brian   F     5       A     C
+3  588 Sally   M     1       A     C
+4  588 Sally   M     3       B     C
+5  710  Jeff   M     2       D     E
+6  710  Jeff   M     4       A     C
+7  731 Roger   F     2       C     A
+8  731 Roger   F     5       B     A
+9  908 Karen   M     3       C     C
+10 908 Karen   M     4       A     A
+
+> students4 %>% select(id, name, sex) %>% unique()
+   id  name sex
+1 168 Brian   F
+3 588 Sally   M
+5 710  Jeff   M
+7 731 Roger   F
+9 908 Karen   M
+
+========================================bind_rows (merge 2 data frames by rows)
+> passed
+   name class final status
+1 Brian     1     B passed
+2 Roger     2     A passed
+3 Roger     5     A passed
+4 Karen     4     A passed
+> failed
+   name class final status
+1 Brian     5     C failed
+2 Sally     1     C failed
+3 Sally     3     C failed
+4  Jeff     2     E failed
+5  Jeff     4     C failed
+6 Karen     3     C failed
+> bind_rows(passed, failed)
+    name class final status
+1  Brian     1     B passed
+2  Roger     2     A passed
+3  Roger     5     A passed
+4  Karen     4     A passed
+5  Brian     5     C failed
+6  Sally     1     C failed
+7  Sally     3     C failed
+8   Jeff     2     E failed
+9   Jeff     4     C failed
+10 Karen     3     C failed
+
+==========================group_by (group by with columns)
+> tab
+# A tibble: 36 x 4
+   score_range part  sex    count
+   <chr>       <chr> <chr>  <int>
+ 1 700-800     read  male   40151
+ 2 600-690     read  male  121950
+ 3 500-590     read  male  227141
+ 4 400-490     read  male  242554
+ 5 300-390     read  male  113568
+ 6 200-290     read  male   30728
+ 7 700-800     read  fem    38898
+ 8 600-690     read  fem   126084
+ 9 500-590     read  fem   259553
+10 400-490     read  fem   296793
+
+ tab %>% group_by(part, sex) %>%
+  mutate(###,
+    total = sum(count),
+    prop = count / total
+  ) %>% print
+
+  # Groups:   part, sex [6]
+   score_range part  sex    count  total   prop
+   <chr>       <chr> <chr>  <int>  <int>  <dbl>
+ 1 700-800     read  male   40151 776092 0.0517
+ 2 600-690     read  male  121950 776092 0.157 
+ 3 500-590     read  male  227141 776092 0.293 
+ 4 400-490     read  male  242554 776092 0.313 
+ 5 300-390     read  male  113568 776092 0.146 
+ 6 200-290     read  male   30728 776092 0.0396
+
+
+
+
+
+
+
+
+
+
+
+
