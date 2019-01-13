@@ -1,0 +1,17 @@
+
+points(cx,cy,col=c("red","orange","purple"),pch=3,cex=2,lwd=2
+
+> apply(distTmp, 2, which.min)
+[1] 2 2 2 1 3 3 3 1 3 3 3 3
+
+
+
+# adjst centroid
+
+>tapply(x, newClust, mean)
+>tapply(y, newClust, mean)
+> points(newCx, newCy, col=cols1, pch=8, cex=2, lwd=2)
+
+> kmeans(dataFrame, centers=3)
+> plot(x, y, col=kmObj$cluster, pch=19, cex=2)   # draw points
+> points(kmObj$centers, col=c("black", "red", "green"), pch=3, cex=3, lwd=3) #draw centroid

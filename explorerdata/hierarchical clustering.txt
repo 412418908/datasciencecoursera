@@ -1,0 +1,42 @@
+
+
+dataFrame
+           x         y
+1  0.7585869 0.8447492
+2  1.0554858 1.0128918
+3  1.2168882 1.1918988
+4  0.5308605 0.9779429
+5  2.0858249 1.8977981
+6  2.1012112 1.8177609
+7  1.8850520 1.8325657
+8  1.8906736 2.4831670
+9  2.8871096 1.0268176
+10 2.8219924 0.9018628
+11 2.9045615 0.9118904
+12 2.8003227 1.0919179
+
+> dist(dataFrame)
+ # calculate distance of dataFrame
+
+
+
+ hc <- hclust(distxy)
+ > hc
+
+Call:
+hclust(d = distxy)
+
+Cluster method   : complete 
+Distance         : euclidean 
+Number of objects: 12 
+
+ > plot(hc)
+ > plot(as.dendrogram(hc))
+
+
+
+ >heatmap(mt)
+
+ 
+
+

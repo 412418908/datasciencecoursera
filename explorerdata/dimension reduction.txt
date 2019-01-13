@@ -1,0 +1,7 @@
+
+
+
+svd(mat)
+
+matu %*% diag %*% t(matv)
+

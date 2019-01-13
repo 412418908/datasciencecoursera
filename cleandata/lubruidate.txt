@@ -1,0 +1,24 @@
+
+
+> today()
+[1] "2018-11-12"
+
+this_day <- today()
+year(this_day), month(this_day), or day(this_day)
+
+
+ wday(this_day, label=TRUE)
+[1] 周一
+Levels: 周日 < 周一 < 周二 < 周三 < 周四 < 周五 < 周六
+
+
+this_moment <- now()
+hour(this_moment)
+
+ymd(), dmy(), hms(), ymd_hms()
+ymd("1980-05-07"
+
+ update(this_moment, hours = 8, minutes = 34, seconds = 55).
+ 
+ depart <- nyc + days(2)
+ 

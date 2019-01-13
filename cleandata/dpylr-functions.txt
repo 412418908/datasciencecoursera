@@ -109,3 +109,74 @@ summarize(cran, avg_bytes = mean(size))
   avg_bytes
       <dbl>
 1   844086.
+
+
+
+
+
+
+
+
+================================group_by
+
+> by_package <- group_by(cran, package)
+>  summarize(by_package, mean(size))
+# A tibble: 6,023 x 2
+   package     `mean(size)`
+   <chr>              <dbl>
+ 1 A3                62195.
+ 2 abc             4826665 
+ 3 abcdeFBA         455980.
+ 4 ABCExtremes       22904.
+ 5 ABCoptim          17807.
+ 6 ABCp2             30473.
+ 7 abctools        2589394 
+ 8 abd              453631.
+ 9 abf2              35693.
+10 abind             32939.
+
+
+
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+
+ pack_sum
+# A tibble: 6,023 x 5
+   package     count unique countries avg_bytes
+   <chr>       <int>  <int>     <int>     <dbl>
+ 1 A3             25     24        10    62195.
+ 2 abc            29     25        16  4826665 
+ 3 abcdeFBA       15     15         9   455980.
+ 4 ABCExtremes    18     17         9    22904.
+ 5 ABCoptim       16     15         9    17807.
+ 6 ABCp2          18     17        10    30473.
+ 7 abctools       19     19        11  2589394 
+ 8 abd            17     16        10   453631.
+
+
+====================quantile (get value at special level)
+>quantile(pack_sum$count, probs = 0.99)
+   99% 
+679.56 
+
+> top_counts <- filter(pack_sum, count>679)
+> top_counts
+# A tibble: 61 x 5
+   package    count unique countries avg_bytes
+   <chr>      <int>  <int>     <int>     <dbl>
+ 1 bitops      1549   1408        76    28715.
+ 2 car         1008    837        64  1229122.
+ 3 caTools      812    699        64   176589.
+ 4 colorspace  1683   1433        80   357411.
+
+
+==========================View (view table of full data)
+ View(top_counts)
+View(top_counts_sorted <- arrange(top_counts, desc(count)))
+
+
+

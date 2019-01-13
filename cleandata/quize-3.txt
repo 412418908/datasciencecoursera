@@ -1,0 +1,6 @@
+data <- read.csv("house.csv")
+data <- tbl_df(data)
+house <- select(data, ACR, AGS)
+tmp1 <- house %>% mutate(logic= !is.na(ACR) & !is.na(AGS) & ACR>=3 & AGS>=6) 
+
+which(tmp1$logic)
